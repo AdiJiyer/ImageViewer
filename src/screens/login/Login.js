@@ -15,7 +15,7 @@ const styles = {
     card: {
         padding: '15px',
         position: 'relative',
-        top: '20px',
+        top: '90px',
         left: '50%',
         width: '325px',
         transform: 'translateX(-50%)',
@@ -25,19 +25,19 @@ const styles = {
     }
 };
 
-
 class Login extends Component{
     constructor(){
         super();
-        this.state ={
-            sername: "",
+        this.state = {
+            username: "",
             usernameRequired: "dispNone",
             password: "",
             passwordRequired: "dispNone",
             incorrectUsernamePassword: "dispNone",
             loggedIn: sessionStorage.getItem('access-token') == null ? false : true
-        }
+        };
     }
+
     loginClickHandler = () => {
         this.setState({ incorrectUsernamePassword: "dispNone" });
         this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
@@ -46,11 +46,17 @@ class Login extends Component{
         if (this.state.username === "" || this.state.password === "") { return }
 
         if (this.state.username === "admin" && this.state.password === "admin") {
+            sessionStorage.setItem('username','admin');
             sessionStorage.setItem('access-token', '8661035776.d0fcd39.87fd934e04f84253aaf234d8bd4e4c65');
             this.setState({ loggedIn: true });
+            this.navigateToHome();
         } else {
             this.setState({ incorrectUsernamePassword: "dispBlock" });
         }
+    }
+
+    navigateToHome = () =>{
+      this.props.history.push('/home');
     }
 
     inputUsernameChangeHandler = (e) => {
@@ -60,10 +66,12 @@ class Login extends Component{
     inputPasswordChangeHandler = (e) => {
         this.setState({ password: e.target.value })
     }
-        render(){
-            return(
-                <div>
-                    <Header />
+
+    render() {
+        return (
+            <div className="main-container">
+                <Header
+                  screen={"Login"}/>
                 <Card style={styles.card}>
                     <CardContent>
                         <br></br>
@@ -83,9 +91,8 @@ class Login extends Component{
                     </CardContent>
                 </Card>
             </div>
-
-            )
-        }
+        )
+    }
 }
 
 export default Login;
